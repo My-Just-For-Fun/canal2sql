@@ -9,14 +9,14 @@ import java.text.SimpleDateFormat;
 
 public class Canal2SqlStarter {
 
+    // 参数: -mode online -P 3306 -h 192.168.188.1 -u root -p zhaowei123 -A
     public static void main(String[] args) {
 
         Long start = System.currentTimeMillis();
 
         Options options = new Options();
 
-        Option rollback = new Option("B", "rollback", false,
-                "Rollback parameter, default is false");
+        Option rollback = new Option("B", "rollback", false, "Rollback parameter, default is false");
         options.addOption(rollback);
 
         Option append = new Option("A", "append", false, "Append parameter, default is false");
@@ -74,8 +74,7 @@ public class Canal2SqlStarter {
         Option sk = new Option("sk", true, "Specify sk");
         options.addOption(sk);
 
-        Option external = new Option("E", "external", false,
-                "External parameter, default is false");
+        Option external = new Option("E", "external", false, "External parameter, default is false");
         options.addOption(external);
 
         Option minimal = new Option("M", "minimal", false, "Minimal parameter, default is false");
@@ -97,8 +96,7 @@ public class Canal2SqlStarter {
             System.out.println(e.getMessage());
             String jarVersion = VersionUtils.getJarVersion();
             if (jarVersion != null) {
-                formatter.printHelp(String.format("java -jar %s-%s.jar", "canal2sql", jarVersion),
-                        options);
+                formatter.printHelp(String.format("java -jar %s-%s.jar", "canal2sql", jarVersion), options);
             } else {
                 formatter.printHelp("not in jar, just specify the parameter below", options);
             }
@@ -173,10 +171,8 @@ public class Canal2SqlStarter {
         config.setDdl(ddlInput);
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            config.setStartDatetime(StringUtils.isEmpty(startDatetimeInput) ? null
-                    : simpleDateFormat.parse(startDatetimeInput));
-            config.setEndDatetime(StringUtils.isEmpty(endDatetimeInput) ? null
-                    : simpleDateFormat.parse(endDatetimeInput));
+            config.setStartDatetime(StringUtils.isEmpty(startDatetimeInput) ? null : simpleDateFormat.parse(startDatetimeInput));
+            config.setEndDatetime(StringUtils.isEmpty(endDatetimeInput) ? null : simpleDateFormat.parse(endDatetimeInput));
         } catch (java.text.ParseException e) {
             throw new RuntimeException(e);
         }
@@ -197,7 +193,6 @@ public class Canal2SqlStarter {
 
         new Canal2Sql().run(config);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println(
-                "# totally cost:" + (System.currentTimeMillis() - start) + " ms")));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("# totally cost:" + (System.currentTimeMillis() - start) + " ms")));
     }
 }
