@@ -71,11 +71,7 @@ public class Canal2Sql {
                         final RowChange fRowChange = rowChage;
 
                         if (rowChage.getIsDdl() && printableSet.contains("ddl")) {
-                            Canal2SqlUtils.printSql(clean, rollback, append, new AtomicBoolean(false),
-                                    entry.getHeader().getLogfileOffset(), entry,
-                                    o -> fRowChange.getSql().endsWith(";") ? fRowChange.getSql()
-                                            : fRowChange.getSql() + ";",
-                                    o -> "temporarily not support rollback sql for ddl");
+                            Canal2SqlUtils.printSql(clean, rollback, append, new AtomicBoolean(false), entry.getHeader().getLogfileOffset(), entry, o -> fRowChange.getSql().endsWith(";") ? fRowChange.getSql() : fRowChange.getSql() + ";", o -> "temporarily not support rollback sql for ddl");
                             System.out.println();
                             continue;
                         }

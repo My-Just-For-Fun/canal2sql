@@ -126,10 +126,19 @@ public class Canal2SqlUtils {
         // 这里要先compareAndSet，因为外围会根据这个来输出分割行
         if (logged.compareAndSet(false, true) && !clean) {
             String logfileName = entry.getHeader().getLogfileName();
+            logger.info("---------------------------------------------------");
+            // println 用来记录读取log文件名称和位置  方便下次重启
+            System.out.println("#" + logfileName + ":" + logfileOffset + " " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(entry.getHeader().getExecuteTime())));
             logger.info("#{}:{} {}", logfileName, logfileOffset, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(entry.getHeader().getExecuteTime())));
         }
+        SQL sqlObj = new SQL();
+        sqlObj.setOperateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(entry.getHeader().getExecuteTime())));
+        sqlObj.setSchemaName(entry.getHeader().getSchemaName());
+        sqlObj.setTableName(entry.getHeader().getTableName());
+        sqlObj.setOperateSql(sql);
+        sqlObj.setRollbackSql(rollbackSql);
+        RabbitMQSender.send(sqlObj);
         logger.info(sql);
-        logger.info("---------------------------------------------------");
     }
 
     private static String getValue(CanalEntry.Column column) {

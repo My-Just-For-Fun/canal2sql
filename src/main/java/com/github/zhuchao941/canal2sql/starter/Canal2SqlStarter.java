@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 
 public class Canal2SqlStarter {
 
-    // 参数: -mode online -P 3306 -h 192.168.188.1 -u root -p zhaowei123 -A
+    // 参数: -mode online -P 3306 -h 192.168.188.1 -u root -p zhaowei123 -A -black_filter eladmin.sys_sql_log  -start_position 
     public static void main(String[] args) {
 
         Long start = System.currentTimeMillis();
