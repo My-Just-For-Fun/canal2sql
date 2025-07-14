@@ -107,6 +107,7 @@ public class Canal2SqlUtils {
     }
 
     public static void printSql(boolean clean, boolean rollback, boolean append, AtomicBoolean logged, long logfileOffset, CanalEntry.Entry entry, Function<Object, String> sqlFunction, Function<Object, String> rollbackFunction) {
+        SQL sqlObj = new SQL();
         Logger logger = DynamicLogger.getLogger(entry.getHeader().getSchemaName());
         String sql = "";
         String rollbackSql = "";
@@ -117,6 +118,7 @@ public class Canal2SqlUtils {
             sql = sqlFunction.apply(null);
         }
         if (rollback && append) {
+            sqlObj.setOperateSql(sql);
             sql = rollbackSql + " # " + sql;
         } else if (!rollback && append) {
             sql = sql + " # " + rollbackSql;
@@ -131,11 +133,10 @@ public class Canal2SqlUtils {
             System.out.println("#" + logfileName + ":" + logfileOffset + " " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(entry.getHeader().getExecuteTime())));
             logger.info("#{}:{} {}", logfileName, logfileOffset, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(entry.getHeader().getExecuteTime())));
         }
-        SQL sqlObj = new SQL();
+        
         sqlObj.setOperateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(entry.getHeader().getExecuteTime())));
         sqlObj.setSchemaName(entry.getHeader().getSchemaName());
         sqlObj.setTableName(entry.getHeader().getTableName());
-        sqlObj.setOperateSql(sql);
         sqlObj.setRollbackSql(rollbackSql);
         RabbitMQSender.send(sqlObj);
         logger.info(sql);
