@@ -115,12 +115,12 @@ public class Canal2SqlUtils {
             rollbackSql = rollbackFunction.apply(null);
         }
         if (append || !rollback) {
+            sqlObj.setOperateSql(sql);
             sql = sqlFunction.apply(null);
         }
         if (rollback && append) {
             sql = rollbackSql + " # " + sql;
         } else if (!rollback && append) {
-            sqlObj.setOperateSql(sql);
             sql = sql + " # " + rollbackSql;
         } else if (rollback) {
             sql = rollbackSql;
