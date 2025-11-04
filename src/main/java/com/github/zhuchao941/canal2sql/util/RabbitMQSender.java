@@ -18,7 +18,7 @@ public class RabbitMQSender {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("192.168.188.1");
             factory.setUsername("zhaowei");
-            factory.setPassword("zhaowei123");
+            factory.setPassword("3219582981zw..");
 
             Connection connection = factory.newConnection();
             channel = connection.createChannel();
